@@ -1,9 +1,9 @@
-package fr.cedricxbg.launchertest.ui.panels.partials;
+package fr.cedricxbg.lilalauncher.ui.panels.partials;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import fr.cedricxbg.launchertest.ui.PanelManager;
-import fr.cedricxbg.launchertest.ui.panel.Panel;
+import fr.cedricxbg.lilalauncher.ui.PanelManager;
+import fr.cedricxbg.lilalauncher.ui.panel.Panel;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +22,7 @@ public class TopBar extends Panel {
     }
 
     @Override
-    public String getStyleSheetPath() {
+    public String getStylesheetPath() {
         return null;
     }
 

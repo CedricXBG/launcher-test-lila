@@ -1,6 +1,6 @@
-package fr.cedricxbg.launchertest.ui.panel;
+package fr.cedricxbg.lilalauncher.ui.panel;
 
-import fr.cedricxbg.launchertest.ui.PanelManager;
+import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import javafx.scene.layout.GridPane;
 
 public interface IPanel {
@@ -8,5 +8,5 @@ public interface IPanel {
     GridPane getLayout();
     void onShow();
     String getName();
-    String getStyleSheetPath();
+    String getStylesheetPath();
 }

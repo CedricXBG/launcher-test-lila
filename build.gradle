@@ -40,7 +40,7 @@ javafx {
 }
 
 application {
-    getMainClass().set('fr.cedricxbg.launchertest.Main')
+    getMainClass().set('fr.cedricxbg.lilalauncher.Main')
 }
 
 compileJava {
@@ -48,7 +48,7 @@ compileJava {
 }
 
 jar {
-    manifest.attributes.put('Main-Class', 'fr.cedricxbg.launchertest.Main')
+    manifest.attributes.put('Main-Class', 'fr.cedricxbg.lilalauncher.Main')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from {

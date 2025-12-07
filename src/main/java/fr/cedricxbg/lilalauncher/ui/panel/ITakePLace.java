@@ -1,4 +1,4 @@
-package fr.cedricxbg.launchertest.ui.panel;
+package fr.cedricxbg.lilalauncher.ui.panel;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;

@@ -1,9 +1,9 @@
-package fr.cedricxbg.launchertest.ui;
+package fr.cedricxbg.lilalauncher.ui;
 
 import com.goxr3plus.fxborderlessscene.borderless.BorderlessScene;
-import fr.cedricxbg.launchertest.Launcher;
-import fr.cedricxbg.launchertest.ui.panel.IPanel;
-import fr.cedricxbg.launchertest.ui.panels.partials.TopBar;
+import fr.cedricxbg.lilalauncher.Launcher;
+import fr.cedricxbg.lilalauncher.ui.panel.IPanel;
+import fr.cedricxbg.lilalauncher.ui.panels.partials.TopBar;
 import fr.flowarg.flowcompat.Platform;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -13,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.util.Objects;
 
 public class PanelManager {
     private final Launcher launcher;
@@ -63,19 +64,31 @@ public class PanelManager {
         GridPane.setVgrow(this.contentPane, Priority.ALWAYS);
         GridPane.setHgrow(this.contentPane, Priority.ALWAYS);
 
+        contentPane.getStyleClass().add("login-layout");
+
         this.stage.show();
     }
 
     public void showPanel(IPanel panel) {
         this.contentPane.getChildren().clear();
         this.contentPane.getChildren().add(panel.getLayout());
-        if (panel.getStyleSheetPath() != null) {
+
+        if (panel.getStylesheetPath() != null) {
             this.stage.getScene().getStylesheets().clear();
-            this.stage.getScene().getStylesheets().add(panel.getStyleSheetPath());
+
+            String css = Objects.requireNonNull(
+                    getClass().getClassLoader().getResource(panel.getStylesheetPath()),
+                    "CSS non trouvée : " + panel.getStylesheetPath()
+            ).toExternalForm();
+
+            this.stage.getScene().getStylesheets().add(css);
         }
+
         panel.init(this);
         panel.onShow();
     }
+
+
 
     public Stage getStage() {
         return stage;

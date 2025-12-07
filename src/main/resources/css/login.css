@@ -1,0 +1,13 @@
+.login-layout {
+    -fx-background: rgb(10, 12, 12);
+}
+
+.login-card {
+    -fx-background-color: white;
+}
+
+.bg-image {
+    -fx-background-image: url("/images/background.png");
+    -fx-background-position: center center;
+    -fx-background-repeat: stretch;
+}

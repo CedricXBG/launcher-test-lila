@@ -1,9 +1,11 @@
-package fr.cedricxbg.launchertest;
+package fr.cedricxbg.lilalauncher;
 
-import fr.cedricxbg.launchertest.ui.PanelManager;
-import fr.cedricxbg.launchertest.utils.Helpers;
+import fr.cedricxbg.lilalauncher.ui.PanelManager;
+import fr.cedricxbg.lilalauncher.ui.panels.pages.Login;
+import fr.cedricxbg.lilalauncher.utils.Helpers;
 import fr.flowarg.flowlogger.ILogger;
 import fr.flowarg.flowlogger.Logger;
+import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,6 +16,7 @@ public class Launcher extends Application {
     private static Launcher instance;
     private final ILogger logger;
     private final File launcherDir = Helpers.generateGamePath("LilasoutifLauncher");
+    private final Saver saver;
 
     public Launcher() {
         instance = this;
@@ -23,6 +26,9 @@ public class Launcher extends Application {
                 this.logger.err("Unable to create launcher directory");
             }
         }
+
+        saver = new Saver(new File(launcherDir, "config.properites"));
+        saver.load();
     }
 
     @Override
@@ -30,6 +36,8 @@ public class Launcher extends Application {
         this.logger.info("Starting launcher");
         this.panelManager = new PanelManager(this, stage);
         this.panelManager.init();
+
+        this.panelManager.showPanel(new Login());
     }
 
     public ILogger getLogger() {
@@ -38,5 +46,9 @@ public class Launcher extends Application {
 
     public static Launcher getInstance() {
         return instance;
+    }
+
+    public Saver getSaver() {
+        return saver;
     }
 }

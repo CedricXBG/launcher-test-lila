@@ -1,4 +1,4 @@
-package fr.cedricxbg.launchertest.utils;
+package fr.cedricxbg.lilalauncher.utils;
 
 import fr.flowarg.flowcompat.Platform;
 

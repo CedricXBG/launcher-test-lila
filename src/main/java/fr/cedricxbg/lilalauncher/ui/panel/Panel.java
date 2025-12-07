@@ -1,7 +1,7 @@
-package fr.cedricxbg.launchertest.ui.panel;
+package fr.cedricxbg.lilalauncher.ui.panel;
 
-import fr.cedricxbg.launchertest.Launcher;
-import fr.cedricxbg.launchertest.ui.PanelManager;
+import fr.cedricxbg.lilalauncher.Launcher;
+import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import fr.flowarg.flowlogger.ILogger;
 import javafx.animation.FadeTransition;
 import javafx.geometry.HPos;
@@ -43,7 +43,7 @@ public abstract class Panel implements IPanel, IMovable, ITakePLace {
     public abstract String getName();
 
     @Override
-    public String getStyleSheetPath() {
+    public String getStylesheetPath() {
         return null;
     }
 

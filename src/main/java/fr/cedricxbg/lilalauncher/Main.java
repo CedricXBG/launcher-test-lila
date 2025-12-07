@@ -1,4 +1,4 @@
-package fr.cedricxbg.launchertest;
+package fr.cedricxbg.lilalauncher;
 
 import javafx.application.Application;
 
