@@ -6,7 +6,10 @@ import fr.cedricxbg.lilalauncher.ui.panels.pages.Login;
 import fr.cedricxbg.lilalauncher.utils.Helpers;
 import fr.flowarg.flowlogger.ILogger;
 import fr.flowarg.flowlogger.Logger;
-import fr.litarvan.openauth.model.AuthProfile;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
+import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -19,7 +22,7 @@ public class Launcher extends Application {
     private final ILogger logger;
     private final File launcherDir = Helpers.generateGamePath("Lilasoutif Launcher");
     private final Saver saver;
-    private AuthProfile authProfile = null;
+    private AuthInfos authInfos = null;
 
     public Launcher() {
         instance = this;
@@ -41,7 +44,7 @@ public class Launcher extends Application {
         this.panelManager.init();
 
         if (this.isUserAlreadyLoggedIn()) {
-            logger.info("Connected as " + authProfile.getName());
+            logger.info("Connected as " + authInfos.getUsername());
 
             this.panelManager.showPanel(new App());
         } else {
@@ -50,19 +53,40 @@ public class Launcher extends Application {
     }
 
     public boolean isUserAlreadyLoggedIn() {
-        if (saver.get("offline-username") != null) {
-            this.authProfile = new AuthProfile(saver.get("offline-username"), null);
+        if (saver.get("msAccessToken") != null && saver.get("msAccessToken") != null) {
+            try {
+                MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+                MicrosoftAuthResult response = authenticator.loginWithRefreshToken(saver.get("msRefreshToken"));
+
+                saver.set("msAccessToken", response.getAccessToken());
+                saver.set("msRefreshToken", response.getRefreshToken());
+                saver.save();
+
+                this.setAuthInfos(new AuthInfos(
+                        response.getProfile().getName(),
+                        response.getAccessToken(),
+                        response.getProfile().getId()
+                ));
+
+                return true;
+            } catch(MicrosoftAuthenticationException e) {
+                saver.remove("msAccessToken");
+                saver.remove("msAccessToken");
+                saver.save();
+            }
+        } else if (saver.get("offline-username") != null) {
+            this.setAuthInfos(new AuthInfos(saver.get("offline-username"), null, null));
             return true;
         }
         return false;
     }
 
-    public void setAuthProfile(AuthProfile authProfile) {
-        this.authProfile = authProfile;
+    public void setAuthInfos(AuthInfos authInfos) {
+        this.authInfos = authInfos;
     }
 
-    public AuthProfile getAuthProfile() {
-        return authProfile;
+    public AuthInfos getAuthInfos() {
+        return authInfos;
     }
 
     public ILogger getLogger() {

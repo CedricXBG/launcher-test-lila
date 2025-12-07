@@ -30,6 +30,7 @@ dependencies {
     implementation 'fr.flowarg:openlauncherlib:3.+'
 
     implementation 'com.github.goxr3plus:FX-BorderlessScene:4.+'
+    implementation 'com.github.oshi:oshi-core:5+'
 }
 
 javafx {
@@ -46,7 +47,7 @@ compileJava {
 }
 
 jar {
-    manifest.attributes.put('Main-Class', 'fr.cedricxbg.lilalauncher.Main')
+    manifest.attributes.put('Main-Class', application.mainClass)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from {

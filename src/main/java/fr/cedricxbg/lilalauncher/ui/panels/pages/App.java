@@ -6,6 +6,7 @@ import fr.cedricxbg.lilalauncher.Launcher;
 import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import fr.cedricxbg.lilalauncher.ui.panel.IPanel;
 import fr.cedricxbg.lilalauncher.ui.panel.Panel;
+import fr.cedricxbg.lilalauncher.ui.panels.pages.content.Settings;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
@@ -103,7 +104,7 @@ public class App extends Panel {
         setCanTakeAllSize(settingsBtn);
         setTop(settingsBtn);
         settingsBtn.setTranslateY(130d);
-        settingsBtn.setOnMouseClicked(e -> setPage(null, settingsBtn));
+        settingsBtn.setOnMouseClicked(e -> setPage(new Settings(), settingsBtn));
 
         sidemenu.getChildren().addAll(homeBtn, settingsBtn);
 
@@ -118,7 +119,7 @@ public class App extends Panel {
         String avatarUrl = "https://minotar.net/avatar/" + (
                 saver.get("offline-username") != null ?
                         "MHF_Steve.png" :
-                        null // TODO: AUTH MS
+                        Launcher.getInstance().getAuthInfos().getUuid() + ".png"
                 );
         ImageView avatarView = new ImageView(new Image(avatarUrl));
         avatarView.setPreserveRatio(true);
@@ -128,7 +129,7 @@ public class App extends Panel {
         setLeft(avatarView);
         avatarView.setTranslateX(15d);
 
-        Label usernameLabel = new Label(Launcher.getInstance().getAuthProfile().getName());
+        Label usernameLabel = new Label(Launcher.getInstance().getAuthInfos().getUsername());
         usernameLabel.setFont(Font.font("Consolas", FontWeight.BOLD, FontPosture.REGULAR, 25f));
         setCanTakeAllSize(usernameLabel);
         setCenterV(usernameLabel);
@@ -146,9 +147,11 @@ public class App extends Panel {
         logoutBtn.getStyleClass().add("logout-btn");
         logoutBtn.setGraphic(logoutIcon);
         logoutBtn.setOnMouseClicked(e -> {
-            saver.remove("offline-username"); // TODO: MS AUTH
+            saver.remove("offline-username");
+            saver.remove("msAccessToken");
+            saver.remove("msRefreshToken");
             saver.save();
-            Launcher.getInstance().setAuthProfile(null);
+            Launcher.getInstance().setAuthInfos(null);
             this.panelManager.showPanel(new Login());
         });
 

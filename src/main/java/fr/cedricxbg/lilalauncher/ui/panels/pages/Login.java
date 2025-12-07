@@ -3,8 +3,11 @@ package fr.cedricxbg.lilalauncher.ui.panels.pages;
 import fr.cedricxbg.lilalauncher.Launcher;
 import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import fr.cedricxbg.lilalauncher.ui.panel.Panel;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.model.AuthProfile;
+import fr.theshark34.openlauncherlib.minecraft.AuthInfos;
 import fr.theshark34.openlauncherlib.util.Saver;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -128,7 +131,7 @@ public class Login extends Panel {
         msLoginBtn.setMaxWidth(300);
         msLoginBtn.setTranslateY(145d);
         msLoginBtn.setGraphic(view);
-        msLoginBtn.setOnMouseClicked(e -> {});
+        msLoginBtn.setOnMouseClicked(e -> this.authenticateMS());
 
         loginCard.getChildren().addAll(userField, btnLogin, separator, loginWithLabel, msLoginBtn);
     }
@@ -138,13 +141,41 @@ public class Login extends Panel {
     }
 
     public void authenticate(String user) {
-        AuthProfile profile = new AuthProfile(userField.getText(), null);
-        saver.set("offline-username", profile.getName());
+        AuthInfos infos = new AuthInfos(userField.getText(), null, null);
+        saver.set("offline-username", infos.getUsername());
         saver.save();
-        Launcher.getInstance().setAuthProfile(profile);
+        Launcher.getInstance().setAuthInfos(infos);
 
-        this.logger.info("Connected as " + profile.getName());
+        this.logger.info("Connected as " + infos.getUsername());
 
         panelManager.showPanel(new App());
+    }
+
+    public void authenticateMS() {
+        MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+        authenticator.loginWithAsyncWebview().whenComplete((response, error) -> {
+            if (error != null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setContentText(error.getMessage());
+                alert.show();
+                return;
+            }
+
+            saver.set("msAccessToken", response.getAccessToken());
+            saver.set("msRefreshToken", response.getRefreshToken());
+            saver.save();
+
+            Launcher.getInstance().setAuthInfos(new AuthInfos(
+                    response.getProfile().getName(),
+                    response.getAccessToken(),
+                    response.getProfile().getId()
+            ));
+            this.logger.info("Connected as " + response.getProfile().getName());
+
+            Platform.runLater(() -> {
+                panelManager.showPanel(new App());
+            });
+        });
     }
 }
