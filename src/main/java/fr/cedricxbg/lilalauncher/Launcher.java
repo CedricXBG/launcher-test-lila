@@ -1,6 +1,7 @@
 package fr.cedricxbg.lilalauncher;
 
 import fr.cedricxbg.lilalauncher.ui.PanelManager;
+import fr.cedricxbg.lilalauncher.ui.panels.pages.App;
 import fr.cedricxbg.lilalauncher.ui.panels.pages.Login;
 import fr.cedricxbg.lilalauncher.utils.Helpers;
 import fr.flowarg.flowlogger.ILogger;
@@ -39,7 +40,21 @@ public class Launcher extends Application {
         this.panelManager = new PanelManager(this, stage);
         this.panelManager.init();
 
-        this.panelManager.showPanel(new Login());
+        if (this.isUserAlreadyLoggedIn()) {
+            logger.info("Connected as " + authProfile.getName());
+
+            this.panelManager.showPanel(new App());
+        } else {
+            this.panelManager.showPanel(new Login());
+        }
+    }
+
+    public boolean isUserAlreadyLoggedIn() {
+        if (saver.get("offline-username") != null) {
+            this.authProfile = new AuthProfile(saver.get("offline-username"), null);
+            return true;
+        }
+        return false;
     }
 
     public void setAuthProfile(AuthProfile authProfile) {

@@ -144,5 +144,7 @@ public class Login extends Panel {
         Launcher.getInstance().setAuthProfile(profile);
 
         this.logger.info("Connected as " + profile.getName());
+
+        panelManager.showPanel(new App());
     }
 }
