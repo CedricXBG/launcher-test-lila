@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    //implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation 'fr.litarvan:openauth:1+'
 
     implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2'
 
@@ -30,13 +30,11 @@ dependencies {
     implementation 'fr.flowarg:openlauncherlib:3.+'
 
     implementation 'com.github.goxr3plus:FX-BorderlessScene:4.+'
-
-    implementation 'fr.litarvan:openauth:1.1.6'
 }
 
 javafx {
     version = 12
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
 }
 
 application {

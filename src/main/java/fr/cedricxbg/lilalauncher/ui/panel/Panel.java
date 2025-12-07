@@ -3,6 +3,7 @@ package fr.cedricxbg.lilalauncher.ui.panel;
 import fr.cedricxbg.lilalauncher.Launcher;
 import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import fr.flowarg.flowlogger.ILogger;
+import fr.flowarg.flowlogger.ILogger;
 import javafx.animation.FadeTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -15,7 +16,7 @@ public abstract class Panel implements IPanel, IMovable, ITakePLace {
     protected GridPane layout = new GridPane();
     protected PanelManager panelManager;
 
-    public Panel(){
+    public Panel() {
         this.logger = Launcher.getInstance().getLogger();
     }
 
@@ -69,7 +70,7 @@ public abstract class Panel implements IPanel, IMovable, ITakePLace {
 
     @Override
     public void setBaseLine(Node node) {
-        GridPane.setValignment(node, VPos.CENTER);
+        GridPane.setValignment(node, VPos.BASELINE);
     }
 
     @Override

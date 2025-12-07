@@ -13,7 +13,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import java.util.Objects;
 
 public class PanelManager {
     private final Launcher launcher;
@@ -27,7 +26,7 @@ public class PanelManager {
     }
 
     public void init() {
-        this.stage.setTitle("Lilasoutif Launcher");
+        this.stage.setTitle("Launcher");
         this.stage.setMinWidth(854);
         this.stage.setMinHeight(480);
         this.stage.setWidth(1280);
@@ -51,11 +50,11 @@ public class PanelManager {
 
             this.stage.setScene(scene);
 
-            RowConstraints topPaneConstraints = new RowConstraints();
-            topPaneConstraints.setValignment(VPos.TOP);
-            topPaneConstraints.setMinHeight(25);
-            topPaneConstraints.setMaxHeight(25);
-            this.layout.getRowConstraints().addAll(topPaneConstraints, new RowConstraints());
+            RowConstraints topPaneContraints = new RowConstraints();
+            topPaneContraints.setValignment(VPos.TOP);
+            topPaneContraints.setMinHeight(25);
+            topPaneContraints.setMaxHeight(25);
+            this.layout.getRowConstraints().addAll(topPaneContraints, new RowConstraints());
             this.layout.add(topBar.getLayout(), 0, 0);
             topBar.init(this);
         }
@@ -64,31 +63,19 @@ public class PanelManager {
         GridPane.setVgrow(this.contentPane, Priority.ALWAYS);
         GridPane.setHgrow(this.contentPane, Priority.ALWAYS);
 
-        contentPane.getStyleClass().add("login-layout");
-
         this.stage.show();
     }
 
     public void showPanel(IPanel panel) {
         this.contentPane.getChildren().clear();
         this.contentPane.getChildren().add(panel.getLayout());
-
         if (panel.getStylesheetPath() != null) {
             this.stage.getScene().getStylesheets().clear();
-
-            String css = Objects.requireNonNull(
-                    getClass().getClassLoader().getResource(panel.getStylesheetPath()),
-                    "CSS non trouvée : " + panel.getStylesheetPath()
-            ).toExternalForm();
-
-            this.stage.getScene().getStylesheets().add(css);
+            this.stage.getScene().getStylesheets().add(panel.getStylesheetPath());
         }
-
         panel.init(this);
         panel.onShow();
     }
-
-
 
     public Stage getStage() {
         return stage;

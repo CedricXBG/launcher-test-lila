@@ -14,14 +14,13 @@ public class Helpers {
                 path = Paths.get(System.getenv("APPDATA"));
                 break;
             case MAC:
-                path = Paths.get(System.getProperty("user.home"), "Library/Application Support");
+                path = Paths.get(System.getProperty("user.home"), "/Library/Application Support/");
                 break;
             case LINUX:
                 path = Paths.get(System.getProperty("user.home"), ".local/share");
                 break;
             default:
                 path = Paths.get(System.getProperty("user.home"));
-                break;
         }
 
         path = Paths.get(path.toString(), folderName);

@@ -3,15 +3,27 @@ package fr.cedricxbg.lilalauncher.ui.panels.pages;
 import fr.cedricxbg.lilalauncher.Launcher;
 import fr.cedricxbg.lilalauncher.ui.PanelManager;
 import fr.cedricxbg.lilalauncher.ui.panel.Panel;
+import fr.litarvan.openauth.model.AuthProfile;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 public class Login extends Panel {
     GridPane loginCard = new GridPane();
 
     Saver saver = Launcher.getInstance().getSaver();
+
+    TextField userField = new TextField();
+    Button btnLogin = new Button("Connexion");
+    Button msLoginBtn = new Button();
 
     @Override
     public String getName() {
@@ -37,17 +49,100 @@ public class Login extends Panel {
         this.layout.getColumnConstraints().addAll(columnConstraints, new ColumnConstraints());
         this.layout.add(loginCard, 0, 0);
 
-        // Background Image
+        // Background image
         GridPane bgImage = new GridPane();
         setCanTakeAllSize(bgImage);
         bgImage.getStyleClass().add("bg-image");
         this.layout.add(bgImage, 1, 0);
 
-        // Login Card
+        // Login card
         setCanTakeAllSize(this.layout);
         loginCard.getStyleClass().add("login-card");
         setLeft(loginCard);
         setCenterH(loginCard);
         setCenterV(loginCard);
+
+        /**
+         * Login sidebar
+         */
+        Label title = new Label("Lilasoutif Launcher");
+        title.setFont(Font.font("Consolas", FontWeight.BOLD, FontPosture.REGULAR, 30f));
+        title.getStyleClass().add("login-title");
+        setCenterH(title);
+        setCanTakeAllSize(this.layout);
+        setTop(title);
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setTranslateY(30d);
+        loginCard.getChildren().add(title);
+
+        // Username
+        setCanTakeAllSize(userField);
+        setCenterV(userField);
+        setCenterH(userField);
+        userField.setPromptText("Pseudo");
+        userField.setMaxWidth(300);
+        userField.setTranslateY(-15d);
+        userField.getStyleClass().add("login-input");
+        userField.textProperty().addListener((_a, oldValue, newValue) -> {
+            this.updateLoginBtnState(userField);
+        });
+
+        // Login button
+        setCanTakeAllWidth(btnLogin);
+        setCenterV(btnLogin);
+        setCenterH(btnLogin);
+        btnLogin.setDisable(true);
+        btnLogin.setMaxWidth(300);
+        btnLogin.setTranslateY(40d);
+        btnLogin.getStyleClass().add("login-log-btn");
+        btnLogin.setOnMouseClicked(e -> {
+            this.authenticate(userField.getText());
+        });
+
+        Separator separator = new Separator();
+        setCanTakeAllSize(separator);
+        setCenterH(separator);
+        setCenterV(separator);
+        separator.getStyleClass().add("login-separator");
+        separator.setMaxWidth(300);
+        separator.setTranslateY(90d);
+
+        // "Login with" label
+        Label loginWithLabel = new Label("Ou se connecter avec".toUpperCase());
+        setCanTakeAllSize(loginWithLabel);
+        setCenterH(loginWithLabel);
+        setCenterV(loginWithLabel);
+        loginWithLabel.setFont(Font.font(loginWithLabel.getFont().getFamily(), FontWeight.BOLD, FontPosture.REGULAR, 14f));
+        loginWithLabel.getStyleClass().add("login-with-label");
+        loginWithLabel.setTranslateY(110d);
+        loginWithLabel.setMaxWidth(280d);
+
+        // Microsoft login button
+        ImageView view = new ImageView(new Image("images/microsoft.png"));
+        view.setPreserveRatio(true);
+        view.setFitHeight(30d);
+        setCanTakeAllSize(msLoginBtn);
+        setCenterH(msLoginBtn);
+        setCenterV(msLoginBtn);
+        msLoginBtn.getStyleClass().add("ms-login-btn");
+        msLoginBtn.setMaxWidth(300);
+        msLoginBtn.setTranslateY(145d);
+        msLoginBtn.setGraphic(view);
+        msLoginBtn.setOnMouseClicked(e -> {});
+
+        loginCard.getChildren().addAll(userField, btnLogin, separator, loginWithLabel, msLoginBtn);
+    }
+
+    public void updateLoginBtnState(TextField textField) {
+        btnLogin.setDisable(userField.getText().isEmpty());
+    }
+
+    public void authenticate(String user) {
+        AuthProfile profile = new AuthProfile(userField.getText(), null);
+        saver.set("offline-username", profile.getName());
+        saver.save();
+        Launcher.getInstance().setAuthProfile(profile);
+
+        this.logger.info("Connected as " + profile.getName());
     }
 }
